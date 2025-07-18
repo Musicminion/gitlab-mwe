@@ -7,9 +7,10 @@
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
-  
-  "postCreateCommand": "docker-compose pull",
-  
+  "waitFor": "onCreateCommand",
+	"updateContentCommand": "docker-compose pull",
+  "postCreateCommand": "docker-compose pull && docker-compose up -d",
+
   "forwardPorts": [
     80,
     443,
