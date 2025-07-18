@@ -4,6 +4,7 @@ services:
     container_name: gitlab
     restart: always
     hostname: 'gitlab.localhost'
+    entrypoint: ["/bin/sh", "-c", "/root/patch/repatch.sh && exec /assets/init-container"] #  
     environment:
       GITLAB_OMNIBUS_CONFIG: |
         # Add any other gitlab.rb configuration here, each on its own line
@@ -20,6 +21,7 @@ services:
       - './config:/etc/gitlab'
       - './logs:/var/log/gitlab'
       - './data:/var/opt/gitlab'
+      - './patch:/root/patch'
     shm_size: '1G'
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
@@ -30,17 +32,17 @@ services:
       - TZ=Asia/Shanghai
       - xpack.security.enabled=false
     # Uncomment the following lines to persist data, config, logs, and plugins
-    volumes:
-      - ./elasticsearch/data:/usr/share/elasticsearch/data
+    # volumes:
+    #   - ./elasticsearch/data:/usr/share/elasticsearch/data
     #   - ./elasticsearch/config:/usr/share/elasticsearch/config
     #   - ./elasticsearch/logs:/usr/share/elasticsearch/logs
-    #   - ./elasticsearch/plugins:/usr/share/elasticsearch/plugins
+    #   - ./elasticsearch/plugins:/usr/share/elasticsearch/plugins 
     ports:
       - '9200:9200'
       - '9300:9300'
     deploy:
       resources:
         limits:
-          memory: 6GiB
-
+          memory: 16GiB
+          cpus: '4'
   
