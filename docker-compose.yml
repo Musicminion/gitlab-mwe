@@ -8,6 +8,10 @@ services:
       GITLAB_OMNIBUS_CONFIG: |
         # Add any other gitlab.rb configuration here, each on its own line
         external_url 'http://127.0.0.1'
+        gitlab_rails['elasticsearch_enabled'] = true
+        gitlab_rails['elasticsearch_url'] = ['http://elasticsearch:9200']
+        gitlab_rails['elasticsearch_indexer_enabled'] = true
+        gitlab_rails['elasticsearch_aws'] = false
     ports:
       - '80:80'
       - '443:443'
@@ -16,4 +20,27 @@ services:
       - './config:/etc/gitlab'
       - './logs:/var/log/gitlab'
       - './data:/var/opt/gitlab'
-    shm_size: '256m'
+    shm_size: '1G'
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+    container_name: elasticsearch
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - TZ=Asia/Shanghai
+      - xpack.security.enabled=false
+    # Uncomment the following lines to persist data, config, logs, and plugins
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+    #   - ./elasticsearch/config:/usr/share/elasticsearch/config
+    #   - ./elasticsearch/logs:/usr/share/elasticsearch/logs
+    #   - ./elasticsearch/plugins:/usr/share/elasticsearch/plugins
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+    deploy:
+      resources:
+        limits:
+          memory: 6GiB
+
+  
