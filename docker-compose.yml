@@ -43,6 +43,6 @@ services:
     deploy:
       resources:
         limits:
-          memory: 16GiB
-          cpus: '4'
+          memory: 1GiB
+    #       cpus: '4'
   
