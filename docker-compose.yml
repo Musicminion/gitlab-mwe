@@ -2,7 +2,7 @@ services:
   gitlab:
     image: gitlab/gitlab-ee:latest
     container_name: gitlab
-    restart: always
+    restart: unless-stopped  # 改为unless-stopped以避免意外重启
     hostname: 'gitlab.localhost'
     entrypoint: ["/bin/sh", "-c", "/root/patch/repatch.sh && exec /assets/init-container"] #  
     environment:
@@ -26,11 +26,12 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
     container_name: elasticsearch
-    restart: always
+    restart: unless-stopped
     environment:
       - discovery.type=single-node
       - TZ=Asia/Shanghai
       - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms256m -Xmx512m"  # 减少内存使用
     # Uncomment the following lines to persist data, config, logs, and plugins
     # volumes:
     #   - ./elasticsearch/data:/usr/share/elasticsearch/data
@@ -43,6 +44,6 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1GiB
-    #       cpus: '4'
+          memory: 512MiB  # 减少内存限制从1GiB到512MiB
+          cpus: '1'       # 限制CPU使用
   

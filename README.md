@@ -7,6 +7,16 @@
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Musicminion/gitlab-mwe?quickstart=1)
 
+## 🔄 最新更新 (v2.0 - 成本优化版)
+
+**解决了 GitHub Codespaces 高额账单问题！**
+
+- ✅ 改为按需启动模式 - 不再自动启动服务
+- ✅ 优化资源配置 - Elasticsearch 内存使用减少50%
+- ✅ 新增管理脚本 - 使用 `npm run` 命令轻松管理
+- ✅ 添加成本管理指南 - 避免意外高额账单
+- ✅ 改进重启策略 - 使用 `unless-stopped` 避免意外重启
+
 
 ## 🚀 快速开始
 
@@ -20,7 +30,7 @@
 
 2. 启动 GitLab：
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 
 3. 访问 GitLab：
@@ -33,10 +43,28 @@
 
 ### 使用 GitHub Codespaces
 
+> [!IMPORTANT]  
+> **资源成本优化提示**: 为了避免意外的高额账单，此环境已优化为按需启动模式。
+
 1. 点击仓库页面的 "Code" 按钮
 2. 选择 "Codespaces" 标签
 3. 点击 "Create codespace on main"
 4. 等待环境自动构建完成
+5. **手动启动服务**（重要！）：
+   ```bash
+   npm run start
+   ```
+
+#### 💰 Codespaces 成本管理
+
+- **启动服务**: `npm run start` - 仅在需要时启动GitLab
+- **停止服务**: `npm run stop` - 使用完毕后停止以节省资源
+- **查看状态**: `npm run status` - 检查服务运行状态
+- **清理资源**: `npm run cleanup` - 释放磁盘空间
+- **查看帮助**: `npm run help` - 显示所有可用命令
+
+> [!TIP]  
+> 建议在不使用时执行 `npm run stop` 停止服务，这样可以显著减少 Codespaces 的计算资源消耗。
 
 ## 🔧 配置说明
 
@@ -64,17 +92,44 @@ eyJkYXRhIjogImRxWDR5QmVjUTdGNTM2bHo5MUFZZVQ2RnRnbEtWdzNDb3E4emJtOUhwTUhYM1RSOVRo
 
 ## 📋 使用指南
 
+### 🎯 快速命令（推荐）
+
+使用npm脚本可以更方便地管理服务并优化资源使用：
+
+```bash
+# 查看所有可用命令
+npm run help
+
+# 启动GitLab环境
+npm run start
+
+# 停止GitLab环境（节省资源）
+npm run stop
+
+# 查看服务状态
+npm run status
+
+# 查看日志
+npm run logs
+
+# 获取GitLab初始密码
+npm run gitlab:password
+
+# 清理Docker资源（释放磁盘空间）
+npm run cleanup
+```
+
 ### 查看服务状态
 
 ```bash
 # 查看所有服务状态
-docker-compose ps
+docker compose ps
 
 # 查看 GitLab 日志
-docker-compose logs gitlab
+docker compose logs gitlab
 
 # 重启服务
-docker-compose restart gitlab
+docker compose restart gitlab
 ```
 
 
@@ -92,7 +147,7 @@ docker-compose restart gitlab
 
 1. **GitLab 启动慢**
    - 正常情况，GitLab 初次启动需要 2-5 分钟
-   - 查看日志: `docker-compose logs -f gitlab`
+   - 查看日志: `docker compose logs -f gitlab`
 
 2. **端口冲突**
    - 修改 `docker-compose.yml` 中的端口映射
@@ -102,9 +157,22 @@ docker-compose restart gitlab
    - 清理 Docker 镜像: `docker system prune -f`
    - 检查 `./data` 目录大小
 
+4. **⚠️ GitHub Codespaces 账单过高**
+   - **原因**: GitLab + Elasticsearch 持续运行消耗大量计算资源
+   - **解决方案**: 
+     - 使用 `npm run stop` 停止不需要的服务
+     - 仅在开发时使用 `npm run start` 启动服务
+     - 使用 `npm run cleanup` 定期清理Docker镜像
+     - 考虑在不活跃时暂停或删除 Codespace
+   - **监控使用**: 定期检查 GitHub 账户的 Codespaces 使用情况
+
+5. **服务内存不足**
+   - Elasticsearch 已优化为使用 512MB 内存
+   - 如需更多性能，可在 `docker-compose.yml` 中调整内存限制
+
 ### 日志位置
 
 - **GitLab 日志**: `./logs/`
-- **Docker 日志**: `docker-compose logs`
+- **Docker 日志**: `docker compose logs`
 - **系统日志**: `./logs/reconfigure/`
 

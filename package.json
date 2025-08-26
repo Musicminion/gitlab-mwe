@@ -1,0 +1,26 @@
+{
+  "name": "gitlab-mwe",
+  "version": "1.0.0",
+  "description": "GitLab Docker Environment for development with cost-optimized Codespaces support",
+  "scripts": {
+    "start": "echo '🚀 启动GitLab环境...' && docker compose up -d",
+    "stop": "echo '⏹️  停止GitLab环境...' && docker compose down",
+    "restart": "echo '🔄 重启GitLab环境...' && docker compose restart",
+    "logs": "docker compose logs -f",
+    "logs:gitlab": "docker compose logs -f gitlab",
+    "logs:elasticsearch": "docker compose logs -f elasticsearch",
+    "status": "docker compose ps",
+    "cleanup": "echo '🧹 清理Docker资源以节省空间...' && docker system prune -f",
+    "gitlab:password": "echo '🔑 获取GitLab初始密码:' && sudo cat config/initial_root_password 2>/dev/null || echo '密码文件不存在，请先启动GitLab服务'",
+    "help": "echo '\\n📖 可用命令:\\n  npm run start     - 启动GitLab环境\\n  npm run stop      - 停止GitLab环境\\n  npm run restart   - 重启GitLab环境\\n  npm run logs      - 查看所有服务日志\\n  npm run status    - 查看服务状态\\n  npm run cleanup   - 清理Docker资源\\n  npm run gitlab:password - 获取GitLab初始密码\\n\\n💡 提示: 使用完毕后请执行 npm run stop 以节省Codespaces资源\\n'"
+  },
+  "keywords": [
+    "gitlab",
+    "docker",
+    "devcontainer",
+    "codespaces",
+    "development"
+  ],
+  "author": "Musicminion",
+  "license": "MIT"
+}

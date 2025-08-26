@@ -9,7 +9,7 @@
   },
   "waitFor": "onCreateCommand",
 	"updateContentCommand": "docker-compose pull",
-  "postCreateCommand": "docker-compose pull && docker-compose up -d",
+  "postCreateCommand": "./setup.sh && echo '\\n✅ 环境准备完成！运行 npm run start 启动GitLab服务'",
 
   "forwardPorts": [
     80,
