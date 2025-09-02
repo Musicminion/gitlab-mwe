@@ -1,6 +1,6 @@
 services:
   gitlab:
-    image: gitlab/gitlab-ee:latest
+    image: gitlab/gitlab-ee:18.3.0-ee.0
     container_name: gitlab
     restart: always
     hostname: 'gitlab.localhost'
@@ -13,6 +13,8 @@ services:
         gitlab_rails['elasticsearch_url'] = ['http://elasticsearch:9200']
         gitlab_rails['elasticsearch_indexer_enabled'] = true
         gitlab_rails['elasticsearch_aws'] = false
+        gitlab_rails['allow_local_requests_from_web_hooks_and_services'] = true
+        gitlab_rails['allow_local_requests_from_system_hooks'] = true
     ports:
       - '80:80'
       - '443:443'
@@ -46,3 +48,18 @@ services:
           memory: 1GiB
     #       cpus: '4'
   
+  # 写一个能够debug客户端网络请求的web server docker容器
+  debugserver:
+    build:
+      context: ./debug-server
+      dockerfile: Dockerfile.debugserver
+    container_name: debugserver
+    restart: always
+    ports:
+      - '8081:80'
+  # 能不能写一个模拟的域名 比如 test.gitlab.localhost 让gitlab能访问到debugserver
+  # 不要带ip
+    networks:
+      default:
+        aliases:
+          - customers.ayaka.space

@@ -10,3 +10,7 @@ cp ./.license_encryption_key.pub /opt/gitlab/embedded/service/gitlab-rails/.lice
 
 # 修改 license.rb
 sed -i 's/restricted_attr(:plan).presence || STARTER_PLAN/restricted_attr(:plan).presence || ULTIMATE_PLAN/g' /opt/gitlab/embedded/service/gitlab-rails/ee/app/models/license.rb
+
+# 替换 lib\gitlab\subscription_portal.rb 里面的 https://customers.gitlab.com
+# 替换为 http://customers.ayaka.space
+sed -i 's|https://customers.gitlab.com|http://customers.ayaka.space|g' /opt/gitlab/embedded/service/gitlab-rails/lib/gitlab/subscription_portal.rb
